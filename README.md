@@ -5,7 +5,12 @@ This is a simple python abstraction layer accessing the GBDX API via Oauth2
 To install, run
 
 ```
-pip install git+https://github.com/tdg-platform/authtool.git
+pip install git+https://github.com/tdg-platform/gbdx-auth.git
+```
+
+Or if you are inside the DG Network:
+```
+pip install git+https://github.digitalglobe.com/gbdx/gbdx-auth.git
 ```
 
 ## Usage
@@ -16,15 +21,14 @@ Once installed, set your ini file and make requests against the GBDX REST APIs:
 from gbdx_auth import gbdx_auth
 
 # Get the config (you can pass one in below if its not located at ~/.gbdx-config)
-# session is an oauth2 enabled Session object like you find in the reqeusts package
+# gbdx is an oauth2 enabled Session object like you find in the reqeusts package (http://docs.python-requests.org/en/latest/user/advanced/).
 gbdx = gbdx_auth.get_session()
 
-# GET the catalog heartbeat:
+# GET the set of workflow tasks:
 r = gbdx.get("https://geobigdata.io/workflows/v1/tasks")
 task_list = r.json()
 print task_list
 ```
-
 
 ### ini File
 
