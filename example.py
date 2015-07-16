@@ -1,5 +1,3 @@
-import os
-
 from gbdx_auth import gbdx_auth
 
 # Get the config (you can pass one in below if its not located at ~/.gbdx-config)
