@@ -43,8 +43,6 @@ def session_from_config(config_file):
     
     def save_token(token_to_save):
         """Save off the token back to the config file."""
-        s.token = token_to_save
-        
         if not 'gbdx_token' in set(cfg.sections()):
             cfg.add_section('gbdx_token')
         cfg.set('gbdx_token', 'json', json.dumps(token_to_save))
