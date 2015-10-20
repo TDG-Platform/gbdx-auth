@@ -1,7 +1,7 @@
 from gbdx_auth import gbdx_auth
 
 # Get the config (you can pass one in below if its not located at ~/.gbdx-config)
-# gbdx is an oauth2 enabled Session object like you find in the reqeusts package (http://docs.python-requests.org/en/latest/user/advanced/).
+# gbdx is an oauth2 enabled Session object like you find in the requests package (http://docs.python-requests.org/en/latest/user/advanced/).
 gbdx = gbdx_auth.get_session()
 
 # GET the set of workflow tasks:
