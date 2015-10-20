@@ -108,9 +108,8 @@ def get_session(config_file=None):
             return session_from_envvars()
         except Exception as e:
             config_file = os.path.expanduser('~/.gbdx-config')
-            if os.path.isfile(config_file):
-                return session_from_config(config_file)
-            else:
-                raise
-    else:
-        return session_from_config(config_file)
+
+    if not os.path.isfile(config_file):
+        raise
+
+    return session_from_config(config_file)
