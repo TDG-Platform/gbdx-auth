@@ -2,6 +2,8 @@
 
 This is a simple python abstraction layer accessing the GBDX API via Oauth2
 
+Current version: 0.0.1
+
 To install, run
 
 ```
