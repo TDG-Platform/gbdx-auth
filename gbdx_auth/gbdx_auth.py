@@ -109,7 +109,19 @@ def get_session(config_file=None):
         except Exception as e:
             config_file = os.path.expanduser('~/.gbdx-config')
 
-    if not os.path.isfile(config_file):
-        raise
+    error_output = """[gbdx]
+auth_url = https://geobigdata.io/auth/v1/oauth/token/
+client_id = your_client_id
+client_secret = your_client_secret
+user_name = your_user_name
+user_password = your_password"""
 
-    return session_from_config(config_file)
+    if not os.path.isfile(config_file):
+        raise Exception("Please create a GBDX credential file at ~/.gbdx-config with these contents:\n%s" % error_output)
+
+    try:
+      session = session_from_config(config_file)
+    except:
+      raise Exception("Invalid credentials or incorrectly formated config file at ~/.gbdx-config")
+
+    return session
