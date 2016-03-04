@@ -7,13 +7,9 @@ Current version: 0.1.0
 To install, run
 
 ```
-pip install git+https://github.com/tdg-platform/gbdx-auth.git
+pip install gbdx-auth
 ```
 
-Or if you are inside the DG Network:
-```
-pip install git+https://github.digitalglobe.com/gbdx/gbdx-auth.git
-```
 
 ## Usage
 
