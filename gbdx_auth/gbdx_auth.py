@@ -36,6 +36,23 @@ def session_from_envvars(auth_url='https://geobigdata.io/auth/v1/oauth/token/',
     s.fetch_token(auth_url, **environ)
     return s
 
+def session_from_kwargs(**kwargs):
+    def save_token(token):
+        s.token = token
+    auth_url='https://geobigdata.io/auth/v1/oauth/token/'
+    s = OAuth2Session(client=LegacyApplicationClient(kwargs.get('client_id')),
+                      auto_refresh_url=auth_url,
+                      auto_refresh_kwargs={'client_id':kwargs.get('client_id'),
+                                           'client_secret':kwargs.get('client_secret')},
+                      token_updater=save_token)
+
+    s.fetch_token(auth_url, 
+                  username=kwargs.get('username'),
+                  password=kwargs.get('password'),
+                  client_id=kwargs.get('client_id'),
+                  client_secret=kwargs.get('client_secret'))
+    return s
+
 
 def session_from_config(config_file):
     """Returns a requests session object with oauth enabled for

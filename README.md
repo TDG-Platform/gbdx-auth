@@ -38,6 +38,15 @@ task_list = r.json()
 print task_list
 ```
 
+You can also pass credentials explicitly if desired:
+
+```python
+gbdx = gbdx_auth.session_from_kwargs(username='<your-username>',
+                                     password='<your-password>',
+                                     client_id='<your-client-id>',
+                                     client_secret='<your-client-secret>')
+```
+
 ### ini File
 
 Various credentials are needed to actually hit the GBDX API.  These are found in a ini file that you pass into `get_session`.  By default, it will first look for environment variables (GBDX_USERNAME, GBDX_PASSWORD, GBDX_CLIENT_ID, and GBDX_CLIENT_SECRET) and then look for ~/.gbdx-config if you don't specify an explicit file to use.  The format should look like:
