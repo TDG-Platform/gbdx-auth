@@ -80,8 +80,8 @@ def session_from_config(config_file):
         token = json.loads(cfg.get('gbdx_token','json'))
 
         # Update the token experation with a little buffer room.
-        token['expires_at'] = (datetime.fromtimestamp(token['expires_at']) -
-                               datetime.now()).total_seconds() - 600
+        token['expires_in'] = (datetime.utcfromtimestamp(token['expires_at']) -
+                               datetime.utcnow()).total_seconds() - 600
 
         # Note that to use a token from the config, we have to set it
         # on the client and the session!
