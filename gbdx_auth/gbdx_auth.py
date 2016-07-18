@@ -1,8 +1,10 @@
 """Some functions for interacting with GBDX end points."""
+from future import standard_library
+standard_library.install_aliases()
 import os
 import base64
 import json
-from ConfigParser import ConfigParser
+from configparser import ConfigParser
 from datetime import datetime
 
 from oauthlib.oauth2 import LegacyApplicationClient
