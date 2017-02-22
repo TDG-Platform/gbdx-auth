@@ -18,22 +18,30 @@ def session_from_envvars(auth_url='https://geobigdata.io/auth/v1/oauth/token/',
     """Returns a session with the GBDX authorization token baked in,
     pulling the credentials from environment variables.
 
-    config_template - An iterable of key, value pairs. The key should
+    environ_template - An iterable of key, value pairs. The key should
                       be the variables used in the oauth workflow, and
                       the values being the environment variables to
                       pull the configuration from.  Change the
                       template values if your envvars differ from the
                       default, but make sure the keys remain the same.
+
+    NOTE: There are two ways to create a GBDX session from environment variables.
+    Set an env variable GBDX_ACCESS_TOKEN to be a GBDX oauth access_token (jwt).
+    Or, provide GBDX_USERNAME, GBDX_PASSWORD, GBDX_CLIENT_ID, and
+    GBDX_CLIENT_SECRET as environment variables.
     """
     def save_token(token):
         s.token = token
-    
-    environ = {var:os.environ[envvar] for var, envvar in environ_template}
-    s = OAuth2Session(client=LegacyApplicationClient(environ['client_id']),
-                      auto_refresh_url=auth_url,
-                      auto_refresh_kwargs={'client_id':environ['client_id'],
-                                           'client_secret':environ['client_secret']},
-                      token_updater=save_token)
+
+    if os.environ.get('GBDX_ACCESS_TOKEN'):
+        s = OAuth2Session(client_id, client=LegacyApplicationClient(client_id, access_token=os.environ.get('GBDX_ACCESS_TOKEN')))
+    else:
+        environ = {var:os.environ[envvar] for var, envvar in environ_template}
+        s = OAuth2Session(client=LegacyApplicationClient(environ['client_id']),
+                          auto_refresh_url=auth_url,
+                          auto_refresh_kwargs={'client_id':environ['client_id'],
+                                               'client_secret':environ['client_secret']},
+                          token_updater=save_token)
 
     s.fetch_token(auth_url, **environ)
     return s
@@ -48,7 +56,7 @@ def session_from_kwargs(**kwargs):
                                            'client_secret':kwargs.get('client_secret')},
                       token_updater=save_token)
 
-    s.fetch_token(auth_url, 
+    s.fetch_token(auth_url,
                   username=kwargs.get('username'),
                   password=kwargs.get('password'),
                   client_id=kwargs.get('client_id'),
@@ -59,7 +67,7 @@ def session_from_kwargs(**kwargs):
 def session_from_config(config_file):
     """Returns a requests session object with oauth enabled for
     interacting with GBDX end points."""
-    
+
     def save_token(token_to_save):
         """Save off the token back to the config file."""
         if not 'gbdx_token' in set(cfg.sections()):
@@ -73,7 +81,7 @@ def session_from_config(config_file):
     if not cfg.read(config_file):
         raise RuntimeError('No ini file found at {} to parse.'.format(config_file))
 
-    client_id = cfg.get('gbdx', 'client_id')    
+    client_id = cfg.get('gbdx', 'client_id')
     client_secret = cfg.get('gbdx', 'client_secret')
 
     # See if we have a token stored in the config, and if not, get one.
@@ -102,7 +110,7 @@ def session_from_config(config_file):
                           token_updater=save_token)
 
         # Get the token and save it to the config.
-        token = s.fetch_token(cfg.get('gbdx','auth_url'), 
+        token = s.fetch_token(cfg.get('gbdx','auth_url'),
                               username=cfg.get('gbdx','user_name'),
                               password=cfg.get('gbdx','user_password'),
                               client_id=client_id,
