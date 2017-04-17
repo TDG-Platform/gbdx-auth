@@ -6,9 +6,38 @@ import base64
 import json
 from configparser import ConfigParser
 from datetime import datetime
+import jwt
 
 from oauthlib.oauth2 import LegacyApplicationClient
 from requests_oauthlib import OAuth2Session
+
+def session_from_existing_token(access_token, refresh_token="no_refresh_token", auth_url='https://geobigdata.io/auth/v1/oauth/token/'):
+    """Returns a session with the GBDX authorization token baked in based on
+    existing access_token and refresh_token.
+
+    access_token - A GBDX access_token
+
+    refresh_token - A GBDX refresh_token
+    """
+    def save_token(token):
+        s.token = token
+
+    # refresh_token is required parameter for OAuth2Session. Default
+    #   refresh_token to "no_refresh_token" if none is provided. This allows
+    #   session to be created with just an access token. Currently gbdx_runtime.json
+    #   only provides an access token. In the future hopefully it will always
+    #   provide both refresh_token and access_token
+    #   TODO when gdbx does provide refresh token in gbdx_runtime, remove this
+    #   default and require refresh_token as parameter to this function
+    token = {"token_type": "Bearer", "refresh_token": refresh_token, "access_token": access_token, "scope": ["read", "write"], "expires_in": 604800, "expires_at": 0}
+
+    # grab the expiration from the jwt access_token. Don't verify because
+    # we dont care about source of token. GBDX auth endpoint will handle that.
+    t = jwt.decode(access_token, verify=False)
+    token['expires_at'] = t['exp']
+
+    s = OAuth2Session(token=token, auto_refresh_url=auth_url, token_updater=save_token)
+    return s
 
 def session_from_envvars(auth_url='https://geobigdata.io/auth/v1/oauth/token/',
                          environ_template=(('username', 'GBDX_USERNAME'),
@@ -24,26 +53,19 @@ def session_from_envvars(auth_url='https://geobigdata.io/auth/v1/oauth/token/',
                       pull the configuration from.  Change the
                       template values if your envvars differ from the
                       default, but make sure the keys remain the same.
-
-    NOTE: There are two ways to create a GBDX session from environment variables.
-    Set an env variable GBDX_ACCESS_TOKEN to be a GBDX oauth access_token (jwt).
-    Or, provide GBDX_USERNAME, GBDX_PASSWORD, GBDX_CLIENT_ID, and
-    GBDX_CLIENT_SECRET as environment variables.
     """
     def save_token(token):
         s.token = token
 
-    if os.environ.get('GBDX_ACCESS_TOKEN'):
-        s = OAuth2Session(client_id, client=LegacyApplicationClient(client_id, access_token=os.environ.get('GBDX_ACCESS_TOKEN')))
-    else:
-        environ = {var:os.environ[envvar] for var, envvar in environ_template}
-        s = OAuth2Session(client=LegacyApplicationClient(environ['client_id']),
-                          auto_refresh_url=auth_url,
-                          auto_refresh_kwargs={'client_id':environ['client_id'],
-                                               'client_secret':environ['client_secret']},
-                          token_updater=save_token)
+    environ = {var:os.environ[envvar] for var, envvar in environ_template}
+    s = OAuth2Session(client=LegacyApplicationClient(environ['client_id']),
+                      auto_refresh_url=auth_url,
+                      auto_refresh_kwargs={'client_id':environ['client_id'],
+                                           'client_secret':environ['client_secret']},
+                      token_updater=save_token)
 
     s.fetch_token(auth_url, **environ)
+
     return s
 
 def session_from_kwargs(**kwargs):
@@ -122,12 +144,17 @@ def session_from_config(config_file):
 def get_session(config_file=None):
     """Returns a requests session with gbdx oauth2 baked in.
 
-    If you provide a path to a config file, it will look there for the
-    credentials.  If you don't it will try to pull the credentials
+    If you provide GBDX_ACCESS_TOKEN and GBDX_REFRESH_TOKEN via env vars it will
+    use those credentials. If you provide a path to a config file, it will look
+    there for the credentials.  If you don't it will try to pull the credentials
     from environment variables (GBDX_USERNAME, GBDX_PASSWORD,
     GBDX_CLIENT_ID, GBDX_CLIENT_SECRET).  If that fails and you have a
     '~/.gbdx-config' ini file, it will read from that.
     """
+
+    if os.environ.get("GBDX_ACCESS_TOKEN", None):
+        return session_from_existing_token(access_token=os.environ.get("GBDX_ACCESS_TOKEN", None), refresh_token=os.environ.get("GBDX_REFRESH_TOKEN", None))
+
     # If not config file, try using environment variables.  If that
     # fails and their is a config in the default location, use that.
     if not config_file:
