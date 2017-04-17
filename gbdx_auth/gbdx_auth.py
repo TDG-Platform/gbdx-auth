@@ -32,8 +32,7 @@ def session_from_existing_token(access_token, refresh_token="no_refresh_token", 
     token = {"token_type": "Bearer", "refresh_token": refresh_token, "access_token": access_token, "scope": ["read", "write"], "expires_in": 604800, "expires_at": 0}
 
     # grab the expiration from the jwt access_token. Don't verify because
-    # we only are grabbing the expiration time dont care about source of token.
-    # GBDX auth endpoint will handle that.
+    # we dont care about source of token. GBDX auth endpoint will handle that.
     t = jwt.decode(access_token, verify=False)
     token['expires_at'] = t['exp']
 
