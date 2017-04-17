@@ -145,8 +145,9 @@ def session_from_config(config_file):
 def get_session(config_file=None):
     """Returns a requests session with gbdx oauth2 baked in.
 
-    If you provide a path to a config file, it will look there for the
-    credentials.  If you don't it will try to pull the credentials
+    If you provide GBDX_ACCESS_TOKEN and GBDX_REFRESH_TOKEN via env vars it will
+    use those credentials. If you provide a path to a config file, it will look
+    there for the credentials.  If you don't it will try to pull the credentials
     from environment variables (GBDX_USERNAME, GBDX_PASSWORD,
     GBDX_CLIENT_ID, GBDX_CLIENT_SECRET).  If that fails and you have a
     '~/.gbdx-config' ini file, it will read from that.
