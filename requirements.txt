@@ -1,4 +1,4 @@
-requests[security]==2.13.0
-oauthlib==2.0.2
-requests-oauthlib==0.8.0
-PyJWT==1.4.2
+requests>=2.13.0
+oauthlib>=2.0.2
+requests-oauthlib>=0.8.0
+PyJWT>=1.4.2
