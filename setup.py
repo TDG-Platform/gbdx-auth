@@ -4,6 +4,8 @@ from codecs import open
 from os import path
 
 here = path.abspath(path.dirname(__file__))
+with open("requirements.txt") as f:
+    requires = f.read().splitlines()
 
 # Get the long description from the relevant file
 setup(
@@ -52,11 +54,7 @@ setup(
     # your project is installed. For an analysis of "install_requires" vs pip's
     # requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
-    install_requires=[
-        'requests[security]==2.13.0', 
-        'requests-oauthlib==0.8.0',
-        'oauthlib==2.0.2',
-        'PyJWT==1.4.2'],
+    install_requires=requires,
 
     # If there are data files included in your packages that need to be
     # installed, specify them here.  If using Python 2.6 or less, then these
