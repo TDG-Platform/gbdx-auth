@@ -19,3 +19,8 @@ requirements:
     - oauthlib >=2.0.2
     - requests-oauthlib >=0.8.0
     - pyjwt >=1.4.2
+  build:
+    - python >=2.7.4
+    - oauthlib >=2.0.2
+    - requests-oauthlib >=0.8.0
+    - pyjwt >=1.4.2
