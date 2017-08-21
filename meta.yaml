@@ -3,24 +3,23 @@
 
 package:
   name: gbdx-auth
-  version: {{ GIT_DESCRIBE_TAG }}
+  version: {{ data.get('version') }}
 
 build:
-  number: {{ GIT_DESCRIBE_NUMBER }}
+  number: {{ environ.get('GIT_DESCRIBE_NUMBER', 0) }}
   script: python setup.py install
-  noarch_python: True
-
+  
 source:
   git_url: ./
 
 requirements:
   run:
-    - python >=2.7.4
+    - python
     - oauthlib >=2.0.2
     - requests-oauthlib >=0.8.0
     - pyjwt >=1.4.2
   build:
-    - python >=2.7.4
+    - python {{ python }}
     - oauthlib >=2.0.2
     - requests-oauthlib >=0.8.0
     - pyjwt >=1.4.2
