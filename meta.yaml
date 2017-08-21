@@ -18,4 +18,4 @@ requirements:
     - python >=2.7.4
     - oauthlib >=2.0.2
     - requests-oauthlib >=0.8.0
-    - PyJWT >=1.4.2
+    - pyjwt >=1.4.2
