@@ -1,0 +1,21 @@
+# NOTE: not used
+{% set data = load_setup_py_data() %}
+
+package:
+  name: gbdx-auth
+  version: {{ GIT_DESCRIBE_TAG }}
+
+build:
+  number: {{ GIT_DESCRIBE_NUMBER }}
+  script: python setup.py install
+  noarch_python: True
+
+source:
+  git_url: ./
+
+requirements:
+  run:
+    - python >=2.7.4
+    - oauthlib >=2.0.2
+    - requests-oauthlib >=0.8.0
+    - PyJWT >=1.4.2
