@@ -53,7 +53,7 @@ setup(
     # requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
     install_requires=[
-        'requests[security]==2.13.0', 
+        'requests[security]==2.18.4',
         'requests-oauthlib==0.8.0',
         'oauthlib==2.0.2',
         'PyJWT==1.4.2',
