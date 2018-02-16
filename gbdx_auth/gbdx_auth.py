@@ -108,7 +108,7 @@ def expire_token(token_to_expire, config_file):
         cfg.add_section('gbdx_token')
 
     # reset expiration to force a new token request
-    token_to_expire.update({"expires_at": 0})
+    token_to_expire.update({"expires_at": 1})
 
     cfg.set('gbdx_token', 'json', json.dumps(token_to_expire))
 
