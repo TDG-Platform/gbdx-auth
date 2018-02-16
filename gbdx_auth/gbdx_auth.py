@@ -86,14 +86,18 @@ def session_from_kwargs(**kwargs):
     return s
 
 
-def expire_token(token_to_expire):
+def expire_token(token_to_expire, config_file):
     """
     We want to expire tokens that return 401's under new auth, then re-try the original request which will trigger a new
     token
     :param token_to_expire:
+    :param config_file
     :return:
     """
-    config_file = os.path.expanduser('~/.gbdx-config')
+    if config_file:
+        config_file = os.path.expanduser(config_file)
+    else:
+        config_file = os.path.expanduser('~/.gbdx-config')
 
     # Read the config file (ini format).
     cfg = ConfigParser()
