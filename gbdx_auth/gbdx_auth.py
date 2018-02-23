@@ -86,6 +86,37 @@ def session_from_kwargs(**kwargs):
     return s
 
 
+def expire_token(token_to_expire, config_file):
+    """
+    We want to expire tokens that return 401's under new auth, then re-try the original request which will trigger a new
+    token
+    :param token_to_expire:
+    :param config_file
+    :return:
+    """
+    if config_file:
+        config_file = os.path.expanduser(config_file)
+    else:
+        config_file = os.path.expanduser('~/.gbdx-config')
+
+    # Read the config file (ini format).
+    cfg = ConfigParser()
+    if not cfg.read(config_file):
+        raise RuntimeError('No ini file found at {} to parse.'.format(config_file))
+
+    if 'gbdx_token' not in set(cfg.sections()):
+        cfg.add_section('gbdx_token')
+
+    # reset expiration to force a new token request
+    token_to_expire.update({"expires_at": 1})
+
+    cfg.set('gbdx_token', 'json', json.dumps(token_to_expire))
+
+    # write back token with expired token
+    with open(config_file, 'w') as sink:
+        cfg.write(sink)
+
+
 def session_from_config(config_file):
     """Returns a requests session object with oauth enabled for
     interacting with GBDX end points."""
