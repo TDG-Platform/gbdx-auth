@@ -1,4 +1,5 @@
 [![PyPI version](https://badge.fury.io/py/gbdx-auth.svg)](https://badge.fury.io/py/gbdx-auth)
+[![Conda version](https://anaconda.org/digitalglobe/gbdx-auth/badges/version.svg)](https://anaconda.org/digitalglobe/gbdx-auth)
 [![Updates](https://pyup.io/repos/github/TDG-Platform/gbdx-auth/shield.svg)](https://pyup.io/repos/github/TDG-Platform/gbdx-auth/)
 
 # GBDX Oauth2 Tool
