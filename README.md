@@ -1,3 +1,5 @@
+[![Updates](https://pyup.io/repos/github/TDG-Platform/gbdx-auth/shield.svg)](https://pyup.io/repos/github/TDG-Platform/gbdx-auth/)
+
 # GBDX Oauth2 Tool
 
 This is a simple python abstraction layer accessing the GBDX API via Oauth2
