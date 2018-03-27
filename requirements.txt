@@ -1,4 +1,6 @@
-requests>=2.13.0
+requests[security]>=2.18.4
 oauthlib>=2.0.2
 requests-oauthlib>=0.8.0
 PyJWT>=1.4.2
+future>=0.16.0
+configparser>=3.5.0

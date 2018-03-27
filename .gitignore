@@ -1,1 +1,11 @@
+release/
 *.pyc
+
+.coverage
+.idea/*
+test-reports/
+htmlcov/
+coverage.xml
+.cache/
+
+.idea/

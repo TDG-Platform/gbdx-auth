@@ -3,10 +3,6 @@ from setuptools import setup, find_packages
 from codecs import open
 from os import path
 
-here = path.abspath(path.dirname(__file__))
-with open("requirements.txt") as f:
-    requires = f.read().splitlines()
-
 # Get the long description from the relevant file
 setup(
     name='gbdx-auth',
@@ -14,7 +10,7 @@ setup(
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='0.2.4',
+    version='0.2.8',
 
     description='An Oauth2 Helper Tool for the GBDX Platform',
 
@@ -54,7 +50,14 @@ setup(
     # your project is installed. For an analysis of "install_requires" vs pip's
     # requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
-    install_requires=requires,
+    install_requires=[
+        'requests[security]>=2.18.4',
+        'requests-oauthlib>=0.8.0',
+        'oauthlib>=2.0.2',
+        'PyJWT>=1.4.2',
+        'future>=0.16.0',
+        'configparser>=3.5.0'
+    ],
 
     # If there are data files included in your packages that need to be
     # installed, specify them here.  If using Python 2.6 or less, then these
