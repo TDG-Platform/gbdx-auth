@@ -53,12 +53,12 @@ setup(
     # requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
     install_requires=[
-        'requests[security]==2.18.4',
-        'requests-oauthlib==0.8.0',
-        'oauthlib==2.0.2',
-        'PyJWT==1.4.2',
-        'future==0.16.0',
-        'configparser==3.5.0'
+        'requests[security]>=2.18.4',
+        'requests-oauthlib>=0.8.0',
+        'oauthlib>=2.0.2',
+        'PyJWT>=1.4.2',
+        'future>=0.16.0',
+        'configparser>=3.5.0'
     ],
 
     # If there are data files included in your packages that need to be
