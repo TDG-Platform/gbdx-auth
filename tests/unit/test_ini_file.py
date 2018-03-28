@@ -9,9 +9,8 @@ How to use vcr to create unit tests:
 2. Decorate the test with @vcr appropriately, supply a yaml file path to gbdx-auth/tests/unit/cassettes
     note: a yaml file will be created after the test is run
 
-4. Run the tests.  This will record a "cassette".
-5. Replace the real gbdx token with "dummytoken" again
-6. Edit the cassette to remove any possibly sensitive information (s3 creds for example)
+3. Run the tests.  This will record a "cassette".
+4. Edit the cassette to remove any possibly sensitive information (s3 creds for example)
 """
 
 

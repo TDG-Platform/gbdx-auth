@@ -7,6 +7,7 @@ import json
 from configparser import ConfigParser
 from datetime import datetime
 import jwt
+from jwt.api_jwt import DecodeError
 import sys
 
 from oauthlib.oauth2 import LegacyApplicationClient
@@ -37,7 +38,10 @@ def session_from_existing_token(access_token, refresh_token="no_refresh_token", 
 
     # grab the expiration from the jwt access_token. Don't verify because
     # we dont care about source of token. GBDX auth endpoint will handle that.
-    t = jwt.decode(access_token, verify=False)
+    try:
+        t = jwt.decode(access_token, verify=False)
+    except DecodeError:
+        raise Exception('Supplied GBDX access token is not a valid JWT.  Check GBDX_ACCESS_TOKEN env var or runtime.json')
     token['expires_at'] = t['exp']
 
     s = OAuth2Session(
