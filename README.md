@@ -64,4 +64,15 @@ user_name = your_user_name
 user_password = your_password
 ```
 
-Note that if you use `get_session`, the token that is fetched is cached in the ini file under  a `[gbdx_token]` section, unless the credentials were pulled from environment variables.  If this section isn't present, a new token is fetched using your credentials.  If it is present, we don't ask for a new one.  Auto refreshing of the token is enabled when using `get_session`, and it will update the cached token on refresh.  
+Note that if you use `get_session`, the token that is fetched is cached in the ini file under  a `[gbdx_token]` section, unless the credentials were pulled from environment variables.  If this section isn't present, a new token is fetched using your credentials.  If it is present, we don't ask for a new one.  Auto refreshing of the token is enabled when using `get_session`, and it will update the cached token on refresh.
+
+
+## Development
+
+DigitalGlobe hosts a conda build for this package: https://anaconda.org/digitalglobe/gbdx-auth 
+
+To produce this build:
+
+1. conda build -c conda-forge -c digitalglobe .
+2. anaconda upload --user digitalglobe {file from step1}
+
