@@ -34,7 +34,7 @@ class env_var_tests(unittest.TestCase):
         with self.assertRaises(Exception) as e:
             gbdx = gbdx_auth.get_session()
 
-        self.assertEqual( e.exception.message, 'Supplied GBDX access token is not a valid JWT.  Check GBDX_ACCESS_TOKEN env var or runtime.json')
+        self.assertEqual( str(e.exception), 'Supplied GBDX access token is not a valid JWT.  Check GBDX_ACCESS_TOKEN env var or runtime.json')
 
         os.environ.pop('GBDX_ACCESS_TOKEN') 
         os.environ.pop('GBDX_REFRESH_TOKEN')
