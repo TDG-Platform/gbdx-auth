@@ -13,6 +13,7 @@ from oauthlib.oauth2 import LegacyApplicationClient
 from requests_oauthlib import OAuth2Session
 
 GBDX_RUNTIME_FILE='/mnt/work/gbdx_runtime.json'
+SAVE_TOKEN = True # if false, never save the token back to the file
 
 def session_from_existing_token(access_token, refresh_token="no_refresh_token", auth_url='https://geobigdata.io/auth/v1/oauth/token/'):
     """Returns a session with the GBDX authorization token baked in based on
@@ -130,6 +131,8 @@ def session_from_config(config_file):
 
     def save_token(token_to_save):
         """Save off the token back to the config file."""
+        if not SAVE_TOKEN:
+            return
         if not 'gbdx_token' in set(cfg.sections()):
             cfg.add_section('gbdx_token')
         cfg.set('gbdx_token', 'json', json.dumps(token_to_save))
