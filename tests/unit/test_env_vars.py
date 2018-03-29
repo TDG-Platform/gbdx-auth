@@ -50,5 +50,62 @@ class env_var_tests(unittest.TestCase):
         os.environ.pop('GBDX_ACCESS_TOKEN') 
         os.environ.pop('GBDX_REFRESH_TOKEN')
 
+    @patch.object(gbdx_auth, 'session_from_envvars')
+    @patch.object(gbdx_auth, 'session_from_config')  # need to mock this because it is a fallback, don't want to call it
+    def test_session_from_existing_env_var_user_pass_id_secret(self, mocked_session_from_config, mocked_session_from_envvars):
+        os.environ['GBDX_USERNAME'] = 'dummy-username@digitalglobe.com'
+        os.environ['GBDX_PASSWORD'] = 'dummy-password'
+        os.environ['GBDX_CLIENT_ID'] = 'dummy-client_id'
+        os.environ['GBDX_CLIENT_SECRET'] = 'dummy-secret'
+        gbdx = gbdx_auth.get_session()
+        self.assertTrue(mocked_session_from_envvars.called)
+
+        os.environ.pop('GBDX_USERNAME') 
+        os.environ.pop('GBDX_PASSWORD')
+        os.environ.pop('GBDX_CLIENT_ID')
+        os.environ.pop('GBDX_CLIENT_SECRET')
+
+    @vcr.use_cassette('tests/unit/cassettes/test_session_from_existing_env_var_user_pass_id_secret2.yaml')
+    def test_session_from_existing_env_var_user_pass_id_secret2(self):
+        os.environ['GBDX_USERNAME'] = 'dummy-username@digitalglobe.com'
+        os.environ['GBDX_PASSWORD'] = 'dummy-password'
+        os.environ['GBDX_CLIENT_ID'] = 'dummy-client_id'
+        os.environ['GBDX_CLIENT_SECRET'] = 'dummy-secret'
+        with self.assertRaises(Exception) as e:
+            gbdx = gbdx_auth.get_session()
+
+        os.environ.pop('GBDX_USERNAME') 
+        os.environ.pop('GBDX_PASSWORD')
+        os.environ.pop('GBDX_CLIENT_ID')
+        os.environ.pop('GBDX_CLIENT_SECRET')
+
+        self.assertEqual( str(e.exception), 'Invalid GBDX credentials given in environment variables.')
+
+    @vcr.use_cassette('tests/unit/cassettes/test_session_from_existing_env_var_user_pass_id_secret3.yaml')
+    def test_session_from_existing_env_var_user_pass_id_secret3(self):
+        os.environ['GBDX_USERNAME'] = 'asdf@digitalglobe.com'
+        os.environ['GBDX_PASSWORD'] = 'fdsa'
+        os.environ['GBDX_CLIENT_ID'] = 'dummy-client_id'
+        os.environ['GBDX_CLIENT_SECRET'] = 'dummy-secret'
+        gbdx = gbdx_auth.get_session()
+
+        os.environ.pop('GBDX_USERNAME') 
+        os.environ.pop('GBDX_PASSWORD')
+        os.environ.pop('GBDX_CLIENT_ID')
+        os.environ.pop('GBDX_CLIENT_SECRET')
+        token = 'dumdumdum'
+        self.assertEqual( token, gbdx.token['access_token'] )
+
+
+    @vcr.use_cassette('tests/unit/cassettes/test_session_from_existing_env_var_without_client_creds.yaml')
+    def test_session_from_existing_env_var_without_client_creds(self):
+        os.environ['GBDX_USERNAME'] = 'asdf@digitalglobe.com'
+        os.environ['GBDX_PASSWORD'] = 'fdsa'
+        gbdx = gbdx_auth.get_session()
+
+        os.environ.pop('GBDX_USERNAME') 
+        os.environ.pop('GBDX_PASSWORD')
+        token = 'dumdumdum'
+        self.assertEqual( token, gbdx.token['access_token'] )
 
     ## TODO: run tests with missing / invalid creds, check for good error messages

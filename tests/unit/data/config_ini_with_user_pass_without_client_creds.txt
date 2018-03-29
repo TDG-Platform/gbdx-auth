@@ -1,0 +1,4 @@
+[gbdx]
+auth_url = https://geobigdata.io/auth/v1/oauth/token/
+user_name = dummyusername@digitalglobe.com
+user_password = dummypassword
