@@ -209,7 +209,7 @@ def get_session(config_file=None):
             return session_from_existing_token(access_token=runtime_json['user_token'])
 
     # If not config file, try using environment variables.  If that
-    # fails and their is a config in the default location, use that.
+    # fails and there is a config in the default location, use that.
     if not config_file:
         try:
             return session_from_envvars()
