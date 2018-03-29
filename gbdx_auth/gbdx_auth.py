@@ -54,9 +54,7 @@ def session_from_existing_token(access_token, refresh_token="no_refresh_token", 
 
 def session_from_envvars(auth_url='https://geobigdata.io/auth/v1/oauth/token/',
                          environ_template=(('username', 'GBDX_USERNAME'),
-                                           ('password', 'GBDX_PASSWORD'),
-                                           ('client_id', 'GBDX_CLIENT_ID'),
-                                           ('client_secret', 'GBDX_CLIENT_SECRET'))):
+                                           ('password', 'GBDX_PASSWORD'))):
     """Returns a session with the GBDX authorization token baked in,
     pulling the credentials from environment variables.
 
@@ -70,11 +68,14 @@ def session_from_envvars(auth_url='https://geobigdata.io/auth/v1/oauth/token/',
     def save_token(token):
         s.token = token
 
+    client_id = 'dummyclientid'
+    client_secret = 'dummyclientsecret'
+
     environ = {var:os.environ[envvar] for var, envvar in environ_template}
-    s = OAuth2Session(client=LegacyApplicationClient(environ['client_id']),
+    s = OAuth2Session(client=LegacyApplicationClient(client_id),
                       auto_refresh_url=auth_url,
-                      auto_refresh_kwargs={'client_id':environ['client_id'],
-                                           'client_secret':environ['client_secret']},
+                      auto_refresh_kwargs={'client_id':client_id,
+                                           'client_secret':client_secret},
                       token_updater=save_token)
 
     s.fetch_token(auth_url, **environ)
@@ -194,9 +195,8 @@ def get_session(config_file=None):
     use those credentials. If GBDX_RUNTIME_FILE is defined with user_token in
     json object it will use those credentials. If you provide a path to a config
     file, it will look there for the credentials. If you don't it will try to
-    pull the credentials from environment variables (GBDX_USERNAME, GBDX_PASSWORD,
-    GBDX_CLIENT_ID, GBDX_CLIENT_SECRET).  If that fails and you have a
-    '~/.gbdx-config' ini file, it will read from that.
+    pull the credentials from environment variables (GBDX_USERNAME, GBDX_PASSWORD).  
+    If that fails and you have a '~/.gbdx-config' ini file, it will read from that.
     """
 
     if os.environ.get("GBDX_ACCESS_TOKEN", None):
@@ -221,8 +221,6 @@ def get_session(config_file=None):
 
     error_output = """[gbdx]
 auth_url = https://geobigdata.io/auth/v1/oauth/token/
-client_id = your_client_id
-client_secret = your_client_secret
 user_name = your_user_name
 user_password = your_password"""
 

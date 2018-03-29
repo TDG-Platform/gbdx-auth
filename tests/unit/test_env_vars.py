@@ -96,4 +96,16 @@ class env_var_tests(unittest.TestCase):
         token = 'dumdumdum'
         self.assertEqual( token, gbdx.token['access_token'] )
 
+
+    @vcr.use_cassette('tests/unit/cassettes/test_session_from_existing_env_var_without_client_creds.yaml')
+    def test_session_from_existing_env_var_without_client_creds(self):
+        os.environ['GBDX_USERNAME'] = 'asdf@digitalglobe.com'
+        os.environ['GBDX_PASSWORD'] = 'fdsa'
+        gbdx = gbdx_auth.get_session()
+
+        os.environ.pop('GBDX_USERNAME') 
+        os.environ.pop('GBDX_PASSWORD')
+        token = 'dumdumdum'
+        self.assertEqual( token, gbdx.token['access_token'] )
+
     ## TODO: run tests with missing / invalid creds, check for good error messages
