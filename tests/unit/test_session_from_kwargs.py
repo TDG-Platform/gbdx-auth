@@ -109,6 +109,26 @@ class session_from_kwargs_tests(unittest.TestCase):
 
         self.assertEqual( str(e.exception), 'Invalid credentials passed into session_from_kwargs()')
 
+    @vcr.use_cassette('tests/unit/cassettes/test_session_from_kwargs_without_client_creds.yaml')
+    def test_session_from_kwargs_without_client_creds(self):
+        username = 'asdf@digitalglobe.com'
+        password = 'fdsa'
+        gbdx = gbdx_auth.session_from_kwargs(username=username,
+                                             password=password)
+
+        token = 'dumdumdum'
+        self.assertEqual( token, gbdx.token['access_token'] )
+
+    @vcr.use_cassette('tests/unit/cassettes/test_session_from_kwargs_invalid_user_pass_without_client_creds.yaml')
+    def test_session_from_kwargs_invalid_user_pass_without_client_creds(self):
+        username = 'asdf@digitalglobe.com'
+        password = 'fdsa'
+        with self.assertRaises(Exception) as e:
+            gbdx = gbdx_auth.session_from_kwargs(username=username,
+                                             password=password)
+
+        self.assertEqual( str(e.exception), 'Invalid credentials passed into session_from_kwargs()')
+
 
     # @vcr.use_cassette('tests/unit/cassettes/test_session_from_existing_env_var_without_client_creds.yaml')
     # def test_session_from_existing_env_var_without_client_creds(self):

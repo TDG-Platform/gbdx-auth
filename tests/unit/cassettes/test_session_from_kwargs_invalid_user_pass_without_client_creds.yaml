@@ -1,0 +1,27 @@
+interactions:
+- request:
+    body: !!python/unicode 'username=asdf%40digitalglobe.com&password=fdsa&grant_type=password'
+    headers:
+      Accept: [!!python/unicode 'application/json']
+      Accept-Encoding: ['gzip, deflate']
+      Authorization: [Basic YXNkZkBkaWdpdGFsZ2xvYmUuY29tOmZkc2E=]
+      Connection: [keep-alive]
+      Content-Length: ['66']
+      Content-Type: [!!python/unicode 'application/x-www-form-urlencoded;charset=UTF-8']
+      User-Agent: [python-requests/2.18.4]
+    method: POST
+    uri: https://geobigdata.io/auth/v1/oauth/token/
+  response:
+    body: {string: !!python/unicode '{"Error": "401 Unauthorized: Unauthorized"}'}
+    headers:
+      access-control-allow-origin: ['*']
+      connection: [keep-alive]
+      content-length: ['43']
+      content-type: [application/json]
+      date: ['Thu, 29 Mar 2018 21:18:29 GMT']
+      server: [nginx/1.12.1]
+      via: [kong/0.10.3]
+      x-kong-proxy-latency: ['0']
+      x-kong-upstream-latency: ['1810']
+    status: {code: 401, message: UNAUTHORIZED}
+version: 1
