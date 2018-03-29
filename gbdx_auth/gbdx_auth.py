@@ -7,12 +7,14 @@ import json
 from configparser import ConfigParser
 from datetime import datetime
 import jwt
+from jwt.api_jwt import DecodeError
 import sys
 
 from oauthlib.oauth2 import LegacyApplicationClient
 from requests_oauthlib import OAuth2Session
 
 GBDX_RUNTIME_FILE='/mnt/work/gbdx_runtime.json'
+SAVE_TOKEN = True # if false, never save the token back to the file
 
 def session_from_existing_token(access_token, refresh_token="no_refresh_token", auth_url='https://geobigdata.io/auth/v1/oauth/token/'):
     """Returns a session with the GBDX authorization token baked in based on
@@ -36,7 +38,10 @@ def session_from_existing_token(access_token, refresh_token="no_refresh_token", 
 
     # grab the expiration from the jwt access_token. Don't verify because
     # we dont care about source of token. GBDX auth endpoint will handle that.
-    t = jwt.decode(access_token, verify=False)
+    try:
+        t = jwt.decode(access_token, verify=False)
+    except DecodeError:
+        raise Exception('Supplied GBDX access token is not a valid JWT.  Check GBDX_ACCESS_TOKEN env var or runtime.json')
     token['expires_at'] = t['exp']
 
     s = OAuth2Session(
@@ -130,6 +135,8 @@ def session_from_config(config_file):
 
     def save_token(token_to_save):
         """Save off the token back to the config file."""
+        if not SAVE_TOKEN:
+            return
         if not 'gbdx_token' in set(cfg.sections()):
             cfg.add_section('gbdx_token')
         cfg.set('gbdx_token', 'json', json.dumps(token_to_save))
@@ -202,7 +209,7 @@ def get_session(config_file=None):
             return session_from_existing_token(access_token=runtime_json['user_token'])
 
     # If not config file, try using environment variables.  If that
-    # fails and their is a config in the default location, use that.
+    # fails and there is a config in the default location, use that.
     if not config_file:
         try:
             return session_from_envvars()
