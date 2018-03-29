@@ -79,8 +79,6 @@ def session_from_envvars(auth_url='https://geobigdata.io/auth/v1/oauth/token/',
 
     s.fetch_token(auth_url, **environ)
 
-    print "hello"
-
     return s
 
 def session_from_kwargs(**kwargs):
