@@ -29,7 +29,7 @@ class ini_file_tests(unittest.TestCase):
 
     @vcr.use_cassette('tests/unit/cassettes/test_session_from_existing_ini_file_user_pass.yaml', filter_headers=['authorization'])
     def test_session_from_existing_ini_file_user_pass(self):
-        gbdx_auth.SAVE_TOKEN = False
+        gbdx_auth.SAVE_TOKEN = False  # prevent the test config file from getting written to
         inifile = 'tests/unit/data/config_ini_with_user_pass.txt'
         gbdx = gbdx_auth.get_session(config_file=inifile)
         self.assertEqual('dumdumdum',gbdx.token['access_token'])
