@@ -81,5 +81,19 @@ class env_var_tests(unittest.TestCase):
 
         self.assertEqual( str(e.exception), 'Invalid GBDX credentials given in environment variables.')
 
+    @vcr.use_cassette('tests/unit/cassettes/test_session_from_existing_env_var_user_pass_id_secret3.yaml')
+    def test_session_from_existing_env_var_user_pass_id_secret3(self):
+        os.environ['GBDX_USERNAME'] = 'asdf@digitalglobe.com'
+        os.environ['GBDX_PASSWORD'] = 'fdsa'
+        os.environ['GBDX_CLIENT_ID'] = 'dummy-client_id'
+        os.environ['GBDX_CLIENT_SECRET'] = 'dummy-secret'
+        gbdx = gbdx_auth.get_session()
+
+        os.environ.pop('GBDX_USERNAME') 
+        os.environ.pop('GBDX_PASSWORD')
+        os.environ.pop('GBDX_CLIENT_ID')
+        os.environ.pop('GBDX_CLIENT_SECRET')
+        token = 'dumdumdum'
+        self.assertEqual( token, gbdx.token['access_token'] )
 
     ## TODO: run tests with missing / invalid creds, check for good error messages
