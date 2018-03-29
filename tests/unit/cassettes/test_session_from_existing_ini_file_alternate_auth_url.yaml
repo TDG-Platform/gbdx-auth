@@ -1,0 +1,30 @@
+interactions:
+- request:
+    body: !!python/unicode 'username=asdf%40digitalglobe.com&client_secret=dummy-secret&password=fdsadsafds&grant_type=password&client_id=dummy-client_id'
+    headers:
+      Accept: [!!python/unicode 'application/json']
+      Accept-Encoding: ['gzip, deflate']
+      Authorization: [Basic ZHVtbXktY2xpZW50X2lkOmR1bW15LXNlY3JldA==]
+      Connection: [keep-alive]
+      Content-Length: ['126']
+      Content-Type: [!!python/unicode 'application/x-www-form-urlencoded;charset=UTF-8']
+      User-Agent: [python-requests/2.18.4]
+    method: POST
+    uri: https://alternate_auth.com/path/to/token/
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAA/6tWSkxOTi0uji/Jz07NU7JSUEopzYUgJR0FpdSKgsyi1OL4TJCUmYGJhYEBUBSsNr6ksiAVpMEpNbEotQikujg5HyIEpPIyUxRScxMzcxTy09JyMvNS4yEWgdQVpaYBDc1A2AkVSAQBpVoAPxKXC5QAAAA=
+    headers:
+      access-control-allow-origin: ['*']
+      connection: [keep-alive]
+      content-encoding: [gzip]
+      content-length: ['994']
+      content-type: [application/json]
+      date: ['Thu, 29 Mar 2018 20:52:15 GMT']
+      server: [nginx/1.12.1]
+      via: [kong/0.10.3]
+      x-kong-proxy-latency: ['0']
+      x-kong-upstream-latency: ['2308']
+    status: {code: 200, message: OK}
+version: 1
