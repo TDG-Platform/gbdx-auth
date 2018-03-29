@@ -231,7 +231,6 @@ def get_session(config_file=None):
             config_file = os.path.expanduser('~/.gbdx-config')
 
     error_output = """[gbdx]
-auth_url = https://geobigdata.io/auth/v1/oauth/token/
 user_name = your_user_name
 user_password = your_password"""
 

@@ -55,7 +55,6 @@ Various credentials are needed to actually hit the GBDX API.  These are found in
 
 ```
 [gbdx]
-auth_url = https://geobigdata.io/auth/v1/oauth/token/
 user_name = your_user_name
 user_password = your_password
 ```
