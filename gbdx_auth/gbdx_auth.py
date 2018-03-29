@@ -15,7 +15,7 @@ from requests_oauthlib import OAuth2Session
 from oauthlib.oauth2.rfc6749.errors import MissingTokenError
 
 GBDX_RUNTIME_FILE='/mnt/work/gbdx_runtime.json'
-SAVE_TOKEN = True # if false, never save the token back to the file
+SAVE_TOKEN = True # if false, never save the token back to the config file
 
 def session_from_existing_token(access_token, refresh_token="no_refresh_token", auth_url='https://geobigdata.io/auth/v1/oauth/token/'):
     """Returns a session with the GBDX authorization token baked in based on
@@ -92,11 +92,15 @@ def session_from_kwargs(**kwargs):
                                            'client_secret':kwargs.get('client_secret')},
                       token_updater=save_token)
 
-    s.fetch_token(auth_url,
+    try:
+        s.fetch_token(auth_url,
                   username=kwargs.get('username'),
                   password=kwargs.get('password'),
                   client_id=kwargs.get('client_id'),
                   client_secret=kwargs.get('client_secret'))
+    except MissingTokenError as e:
+        raise Exception('Invalid credentials passed into session_from_kwargs()')
+
     return s
 
 
