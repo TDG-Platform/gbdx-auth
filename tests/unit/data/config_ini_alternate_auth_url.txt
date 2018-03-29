@@ -1,0 +1,4 @@
+[gbdx]
+auth_url = https://alternate_auth.com/path/to/token/
+user_name = dummyusername@digitalglobe.com
+user_password = dummypassword
