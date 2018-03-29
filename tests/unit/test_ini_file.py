@@ -41,5 +41,14 @@ class ini_file_tests(unittest.TestCase):
         gbdx = gbdx_auth.get_session(config_file=inifile)
         self.assertTrue(mocked_session_from_config.called)
 
+    @vcr.use_cassette('tests/unit/cassettes/test_session_from_existing_ini_file_user_pass_without_client_creds.yaml', filter_headers=['authorization'])
+    def test_session_from_existing_ini_file_user_pass_without_client_creds(self):
+        gbdx_auth.SAVE_TOKEN = False  # prevent the test config file from getting written to
+        inifile = 'tests/unit/data/config_ini_with_user_pass_without_client_creds.txt'
+        gbdx = gbdx_auth.get_session(config_file=inifile)
+        self.assertEqual('dumdumdum',gbdx.token['access_token'])
+        gbdx_auth.SAVE_TOKEN = True
+
+
 
     ## TODO: run tests with missing / invalid creds, check for good error messages

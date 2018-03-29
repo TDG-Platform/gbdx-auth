@@ -148,8 +148,8 @@ def session_from_config(config_file):
     if not cfg.read(config_file):
         raise RuntimeError('No ini file found at {} to parse.'.format(config_file))
 
-    client_id = cfg.get('gbdx', 'client_id')
-    client_secret = cfg.get('gbdx', 'client_secret')
+    client_id = 'dummy_client_id(not-required)'
+    client_secret = 'dummy_client_secret(not-required)'
 
     # See if we have a token stored in the config, and if not, get one.
     if 'gbdx_token' in set(cfg.sections()):
