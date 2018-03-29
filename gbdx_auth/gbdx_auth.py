@@ -12,6 +12,7 @@ import sys
 
 from oauthlib.oauth2 import LegacyApplicationClient
 from requests_oauthlib import OAuth2Session
+from oauthlib.oauth2.rfc6749.errors import MissingTokenError
 
 GBDX_RUNTIME_FILE='/mnt/work/gbdx_runtime.json'
 SAVE_TOKEN = True # if false, never save the token back to the file
@@ -77,6 +78,8 @@ def session_from_envvars(auth_url='https://geobigdata.io/auth/v1/oauth/token/',
                       token_updater=save_token)
 
     s.fetch_token(auth_url, **environ)
+
+    print "hello"
 
     return s
 
@@ -208,11 +211,13 @@ def get_session(config_file=None):
         if runtime_json.get('user_token', None):
             return session_from_existing_token(access_token=runtime_json['user_token'])
 
-    # If not config file, try using environment variables.  If that
+    # If no config file specified, try using environment variables.  If that
     # fails and there is a config in the default location, use that.
     if not config_file:
         try:
             return session_from_envvars()
+        except MissingTokenError as e:
+            raise Exception('Invalid GBDX credentials given in environment variables.')
         except Exception as e:
             config_file = os.path.expanduser('~/.gbdx-config')
 
