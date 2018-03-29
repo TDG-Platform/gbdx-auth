@@ -1,0 +1,3 @@
+[gbdx]
+user_name = dummyusername@digitalglobe.com
+user_password = dummypassword

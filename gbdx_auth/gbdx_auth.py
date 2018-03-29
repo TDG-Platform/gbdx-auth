@@ -16,8 +16,9 @@ from oauthlib.oauth2.rfc6749.errors import MissingTokenError
 
 GBDX_RUNTIME_FILE='/mnt/work/gbdx_runtime.json'
 SAVE_TOKEN = True # if false, never save the token back to the config file
+PRODUCTION_AUTH_URL = 'https://geobigdata.io/auth/v1/oauth/token/'
 
-def session_from_existing_token(access_token, refresh_token="no_refresh_token", auth_url='https://geobigdata.io/auth/v1/oauth/token/'):
+def session_from_existing_token(access_token, refresh_token="no_refresh_token", auth_url=PRODUCTION_AUTH_URL):
     """Returns a session with the GBDX authorization token baked in based on
     existing access_token and refresh_token.
 
@@ -52,7 +53,7 @@ def session_from_existing_token(access_token, refresh_token="no_refresh_token", 
             )
     return s
 
-def session_from_envvars(auth_url='https://geobigdata.io/auth/v1/oauth/token/',
+def session_from_envvars(auth_url=PRODUCTION_AUTH_URL,
                          environ_template=(('username', 'GBDX_USERNAME'),
                                            ('password', 'GBDX_PASSWORD'))):
     """Returns a session with the GBDX authorization token baked in,
@@ -85,7 +86,7 @@ def session_from_envvars(auth_url='https://geobigdata.io/auth/v1/oauth/token/',
 def session_from_kwargs(**kwargs):
     def save_token(token):
         s.token = token
-    auth_url='https://geobigdata.io/auth/v1/oauth/token/'
+    auth_url=PRODUCTION_AUTH_URL
     s = OAuth2Session(client=LegacyApplicationClient(kwargs.get('client_id')),
                       auto_refresh_url=auth_url,
                       auto_refresh_kwargs={'client_id':kwargs.get('client_id'),
@@ -157,6 +158,12 @@ def session_from_config(config_file):
     client_id = 'dummy_client_id(not-required)'
     client_secret = 'dummy_client_secret(not-required)'
 
+    # the ini file has the optional ability to set an auth url (useful for dev)
+    if not cfg.has_option('gbdx','auth_url'):
+        auth_url = PRODUCTION_AUTH_URL
+    else:
+        auth_url = cfg.get('gbdx','auth_url')
+
     # See if we have a token stored in the config, and if not, get one.
     if 'gbdx_token' in set(cfg.sections()):
         # Parse the token from the config.
@@ -169,7 +176,7 @@ def session_from_config(config_file):
         # Note that to use a token from the config, we have to set it
         # on the client and the session!
         s = OAuth2Session(client_id, client=LegacyApplicationClient(client_id, token=token),
-                          auto_refresh_url=cfg.get('gbdx','auth_url'),
+                          auto_refresh_url=auth_url,
                           auto_refresh_kwargs={'client_id':client_id,
                                                'client_secret':client_secret},
                           token_updater=save_token)
@@ -177,13 +184,13 @@ def session_from_config(config_file):
     else:
         # No pre-existing token, so we request one from the API.
         s = OAuth2Session(client_id, client=LegacyApplicationClient(client_id),
-                          auto_refresh_url=cfg.get('gbdx','auth_url'),
+                          auto_refresh_url=auth_url,
                           auto_refresh_kwargs={'client_id':client_id,
                                                'client_secret':client_secret},
                           token_updater=save_token)
 
         # Get the token and save it to the config.
-        token = s.fetch_token(cfg.get('gbdx','auth_url'),
+        token = s.fetch_token(auth_url,
                               username=cfg.get('gbdx','user_name'),
                               password=cfg.get('gbdx','user_password'),
                               client_id=client_id,
