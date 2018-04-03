@@ -1,0 +1,15 @@
+name: gbdx-auth
+description: Open source python SDK Oauth2 tools for authenticating to GBDX via config file, env vars, etc.
+source: https://github.com/tdg-platform/gbdx-auth
+team: GBDX Team
+language: python
+
+poc:
+  - name: Nate Ricklin
+    email: nricklin@digitalglobe.com
+  - name: Chris Helm
+    email: chelm@digitalglobe.com
+
+documentation:
+  - type: external
+    url: https://github.com/tdg-platform/gbdx-auth
