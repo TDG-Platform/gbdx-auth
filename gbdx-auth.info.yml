@@ -4,11 +4,11 @@ source: https://github.com/tdg-platform/gbdx-auth
 team: GBDX Team
 language: python
 
+data_classification:
+  - company_proprietary
 poc:
-  - name: Nate Ricklin
-    email: nricklin@digitalglobe.com
-  - name: Chris Helm
-    email: chelm@digitalglobe.com
+  - name: Team Cutthroat
+    email: team_cutthroat@maxar.com
 
 documentation:
   - type: external
